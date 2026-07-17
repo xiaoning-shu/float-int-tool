@@ -3,42 +3,105 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Float Int Tool</title>
+    <meta name="theme-color" content="#080b0d">
+    <title>Float Int Tool — IEEE-754 Workbench</title>
+    <script>
+      (() => {
+        const saved = localStorage.getItem("float-tool-theme");
+        const preferred = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+        document.documentElement.dataset.theme = saved || preferred;
+      })();
+    </script>
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
+    <div class="scene" aria-hidden="true">
+      <div class="scene-orbit orbit-one"></div>
+      <div class="scene-orbit orbit-two"></div>
+      <div class="scene-glow"></div>
+      <div class="scene-grid"></div>
+    </div>
+
     <main class="app-shell">
-      <header class="hero">
-        <div>
-          <p class="eyebrow">IEEE-754 visual converter</p>
-          <h1>Float Toy</h1>
+      <nav class="topbar" aria-label="Primary navigation">
+        <a class="brand" href="#top" aria-label="Float home">
+          <span class="brand-mark" aria-hidden="true">
+            <i></i><i></i><i></i><i></i><i></i>
+          </span>
+          <span><b>FLOAT</b><small>Binary systems lab</small></span>
+        </a>
+        <div class="nav-links" aria-label="Page sections">
+          <a class="active" href="#formats">Workbench</a>
+          <a href="#presets">Presets</a>
+          <a href="#about">About</a>
+        </div>
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch color theme" aria-pressed="false">
+          <svg class="sun-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.5"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"></path></svg>
+          <svg class="moon-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 15.2A8.6 8.6 0 0 1 8.8 4a8.6 8.6 0 1 0 11.2 11.2Z"></path></svg>
+          <span class="theme-label">Light mode</span>
+        </button>
+      </nav>
+
+      <header class="hero" id="top">
+        <section class="hero-copy">
+          <div class="status-line"><span class="pulse"></span> IEEE-754 inspection system</div>
+          <p class="eyebrow">Binary precision / live workspace</p>
+          <h1>See the number<br><span>behind the number.</span></h1>
           <p class="intro">
-            Toggle bits, edit hexadecimal words, or enter decimal values to inspect
-            float16, float32, float64, and x87 float80 representations.
+            Explore floating-point values at bit level. Toggle fields, edit hexadecimal
+            words, and compare four IEEE-754 representations in real time.
           </p>
-        </div>
-        <div class="quick-input" aria-label="Set all formats from a decimal value">
-          <label for="globalDecimal">Decimal input</label>
-          <div class="quick-row">
-            <input id="globalDecimal" type="text" inputmode="decimal" value="3.141592653589793">
-            <button id="applyGlobal" type="button">Apply</button>
+        </section>
+
+        <aside class="control-panel" aria-label="Set all formats from a decimal value">
+          <div class="panel-heading">
+            <span>Universal input</span>
+            <span class="live-label"><i></i> live</span>
           </div>
-        </div>
+          <label for="globalDecimal">Decimal value</label>
+          <div class="quick-row">
+            <input id="globalDecimal" type="text" inputmode="decimal" value="3.141592653589793" autocomplete="off">
+            <button id="applyGlobal" class="primary-action" type="button" aria-label="Apply value to all formats">
+              Apply <span aria-hidden="true">↗</span>
+            </button>
+          </div>
+          <div class="input-readout">
+            <span><small>Formats</small><b>04</b></span>
+            <span><small>Total bits</small><b>192</b></span>
+            <span><small>State</small><b id="valueState">NORMAL</b></span>
+          </div>
+        </aside>
       </header>
 
-      <section class="toolbar" aria-label="Preset values">
-        <button type="button" data-preset="0">0</button>
-        <button type="button" data-preset="-0">-0</button>
-        <button type="button" data-preset="1">1</button>
-        <button type="button" data-preset="-1">-1</button>
-        <button type="button" data-preset="3.141592653589793">pi</button>
-        <button type="button" data-preset="2.718281828459045">e</button>
-        <button type="button" data-preset="Infinity">+inf</button>
-        <button type="button" data-preset="-Infinity">-inf</button>
-        <button type="button" data-preset="NaN">NaN</button>
+      <section class="preset-section" id="presets" aria-label="Preset values">
+        <div class="section-label"><span>Quick values</span><i></i></div>
+        <div class="toolbar">
+          <button type="button" data-preset="0">0</button>
+          <button type="button" data-preset="-0">−0</button>
+          <button type="button" data-preset="1">1</button>
+          <button type="button" data-preset="-1">−1</button>
+          <button type="button" data-preset="3.141592653589793">π <small>Pi</small></button>
+          <button type="button" data-preset="2.718281828459045">e <small>Euler</small></button>
+          <button type="button" data-preset="Infinity">+∞</button>
+          <button type="button" data-preset="-Infinity">−∞</button>
+          <button type="button" data-preset="NaN">NaN</button>
+        </div>
       </section>
 
+      <div class="workspace-heading">
+        <div>
+          <p class="eyebrow">Precision overview</p>
+          <h2>Representation matrix</h2>
+        </div>
+        <p>Click any bit to toggle its state. Changes propagate through the hexadecimal, decimal, and equation views.</p>
+      </div>
+
       <section id="formats" class="formats" aria-live="polite"></section>
+
+      <footer id="about">
+        <span>FLOAT / IEEE-754 VISUAL WORKBENCH</span>
+        <span>16 · 32 · 64 · 80 BIT PRECISION</span>
+      </footer>
     </main>
 
     <script src="script.js"></script>

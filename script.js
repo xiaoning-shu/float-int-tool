@@ -9,6 +9,9 @@ const state = new Map();
 const formatsEl = document.querySelector("#formats");
 const globalInput = document.querySelector("#globalDecimal");
 const applyGlobal = document.querySelector("#applyGlobal");
+const valueState = document.querySelector("#valueState");
+const themeToggle = document.querySelector("#themeToggle");
+const themeMeta = document.querySelector('meta[name="theme-color"]');
 
 function bitsFromBigInt(value, totalBits) {
   return Array.from({ length: totalBits }, (_, index) => {
@@ -221,11 +224,15 @@ function createFormat(format) {
   const card = document.createElement("article");
   card.className = "format-card";
   card.dataset.format = format.key;
+  card.dataset.index = String(FORMAT_DEFS.indexOf(format) + 1).padStart(2, "0");
   card.innerHTML = `
     <div class="format-header">
-      <div>
-        <h2 class="format-title">${format.title}</h2>
-        <div class="format-meta">${format.expBits} exponent bits, ${format.fracBits} significand bits, bias ${format.bias}</div>
+      <div class="format-title-wrap">
+        <span class="format-icon">${format.bits}</span>
+        <div>
+          <h3 class="format-title">${format.title}<span class="classification">normal</span></h3>
+          <div class="format-meta">${format.expBits} exponent bits / ${format.fracBits} significand bits / bias ${format.bias}</div>
+        </div>
       </div>
       <div class="legend-row" aria-label="Bit field legend">
         <span class="legend-item"><span class="legend-dot sign"></span>sign</span>
@@ -288,6 +295,7 @@ function updateFormat(key, options = {}) {
   const hexInput = card.querySelector(".hex-input");
   const decimalInput = card.querySelector(".decimal-input");
   const equation = card.querySelector(".equation");
+  const classification = card.querySelector(".classification");
   const bitButtons = card.querySelectorAll(".bit");
 
   bitButtons.forEach((button, index) => {
@@ -298,11 +306,21 @@ function updateFormat(key, options = {}) {
 
   if (!options.keepHexFocus) hexInput.value = bitsToHex(bits, format.hexDigits);
   if (!options.keepDecimalFocus) decimalInput.value = formatDecimal(decoded.decimal);
+  classification.textContent = decoded.classification;
   equation.innerHTML = renderEquation(decoded);
 }
 
 function setAllFromDecimal(raw) {
   const value = parseDecimal(raw);
+  if (Number.isNaN(value)) {
+    valueState.textContent = /^nan$/i.test(raw.trim()) ? "NAN" : "INVALID";
+  } else if (!Number.isFinite(value)) {
+    valueState.textContent = "INFINITY";
+  } else if (value === 0) {
+    valueState.textContent = "ZERO";
+  } else {
+    valueState.textContent = "NORMAL";
+  }
   FORMAT_DEFS.forEach((format) => {
     const item = state.get(format.key);
     item.bits = decimalToBits(format, value);
@@ -367,3 +385,20 @@ document.querySelectorAll("[data-preset]").forEach((button) => {
     setAllFromDecimal(button.dataset.preset);
   });
 });
+
+function syncThemeControl() {
+  const isLight = document.documentElement.dataset.theme === "light";
+  themeToggle.setAttribute("aria-pressed", isLight ? "true" : "false");
+  themeToggle.querySelector(".theme-label").textContent = isLight ? "Dark mode" : "Light mode";
+  themeToggle.setAttribute("aria-label", isLight ? "Switch to dark theme" : "Switch to light theme");
+  themeMeta.setAttribute("content", isLight ? "#e8e9e5" : "#080b0d");
+}
+
+themeToggle.addEventListener("click", () => {
+  const nextTheme = document.documentElement.dataset.theme === "light" ? "dark" : "light";
+  document.documentElement.dataset.theme = nextTheme;
+  localStorage.setItem("float-tool-theme", nextTheme);
+  syncThemeControl();
+});
+
+syncThemeControl();
