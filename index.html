@@ -88,6 +88,17 @@
         </div>
       </section>
 
+      <section class="converter-panel" aria-label="Convert 64-bit float to 80-bit extended">
+        <div class="section-label"><span>64 → 80 bit converter</span><i></i></div>
+        <div class="converter-row">
+          <label for="float64Hex">64-bit hex</label>
+          <input id="float64Hex" type="text" inputmode="text" value="400921FB54442D18" spellcheck="false" autocomplete="off">
+          <button id="convert64To80" class="primary-action" type="button">Convert <span aria-hidden="true">↗</span></button>
+          <output id="float80Hex" class="converter-output" aria-live="polite">4000C90FDAA22168C000</output>
+        </div>
+        <p class="converter-help">输入 16 位十六进制 binary64（可带 0x），输出表示相同数值的 20 位 x87 extended，并同步更新下方两张表示卡。指数会重设偏置，有效数会扩展到 64 位。</p>
+      </section>
+
       <div class="workspace-heading">
         <div>
           <p class="eyebrow">Precision overview</p>

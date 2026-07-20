@@ -229,6 +229,15 @@ input:focus { border-color: color-mix(in srgb, var(--accent) 60%, transparent); 
 .section-label i { flex: 1; height: 1px; background: var(--line); }
 .toolbar { display: grid; grid-template-columns: repeat(9, 1fr); gap: 8px; margin-top: 14px; }
 .toolbar button { min-height: 52px; padding: 0 10px; border: 1px solid var(--line); border-radius: 11px; color: var(--ink-soft); background: var(--bit-off); font: 500 .76rem "DM Mono", monospace; cursor: pointer; transition: 180ms ease; }
+
+.converter-panel { margin: 28px 0 42px; padding: 20px 22px; border: 1px solid var(--line); border-radius: 16px; background: var(--panel); }
+.converter-row { display: flex; align-items: center; gap: 12px; margin-top: 14px; }
+.converter-row label { color: var(--muted); font-size: .75rem; text-transform: uppercase; letter-spacing: .08em; }
+.converter-row input, .converter-output { min-height: 44px; border: 1px solid var(--line); border-radius: 10px; padding: 0 12px; color: var(--ink); background: var(--bit-off); font: 500 .85rem "DM Mono", monospace; }
+.converter-row input { width: 210px; }
+.converter-output { display: inline-flex; align-items: center; min-width: 260px; color: var(--accent); }
+.converter-help { margin: 12px 0 0; color: var(--muted); font-size: .75rem; }
+@media (max-width: 700px) { .converter-row { align-items: stretch; flex-direction: column; } .converter-row input, .converter-output { width: 100%; box-sizing: border-box; } }
 .toolbar button small { margin-left: 5px; color: var(--muted); font: 500 .55rem "Manrope", sans-serif; text-transform: uppercase; }
 .toolbar button:hover { color: var(--accent-ink); border-color: var(--accent); background: var(--accent); transform: translateY(-2px); }
 

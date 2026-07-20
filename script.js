@@ -12,6 +12,9 @@ const applyGlobal = document.querySelector("#applyGlobal");
 const valueState = document.querySelector("#valueState");
 const themeToggle = document.querySelector("#themeToggle");
 const themeMeta = document.querySelector('meta[name="theme-color"]');
+const float64HexInput = document.querySelector("#float64Hex");
+const convert64To80Button = document.querySelector("#convert64To80");
+const float80HexOutput = document.querySelector("#float80Hex");
 
 function bitsFromBigInt(value, totalBits) {
   return Array.from({ length: totalBits }, (_, index) => {
@@ -84,33 +87,39 @@ function decimalToFloat16Bits(value) {
 }
 
 function decimalToFloat80Bits(value) {
-  if (Number.isNaN(value)) return hexToBits("7FFFC000000000000000", 80);
-  const sign = Object.is(value, -0) || value < 0 ? 1n : 0n;
-  const abs = Math.abs(value);
-  if (abs === 0) return bitsFromBigInt(sign << 79n, 80);
-  if (!Number.isFinite(abs)) return bitsFromBigInt((sign << 79n) | (0x7FFFn << 64n) | (1n << 63n), 80);
+  return float64HexToFloat80Bits(bitsToHex(decimalToFloat64Bits(value), 16));
+}
 
-  const exponent = Math.floor(Math.log2(abs));
-  const scaled = abs / 2 ** exponent;
-  let significand = BigInt(Math.round(scaled * 2 ** 63));
-  let biased = exponent + 16383;
+// Exact conversion of an IEEE-754 binary64 bit pattern to x87 80-bit extended.
+// The returned layout is: sign (1) | exponent (15) | explicit integer + fraction (64).
+function float64HexToFloat80Bits(hex) {
+  const raw = BigInt(`0x${sanitizeHex(hex, 16)}`);
+  const sign = (raw >> 63n) & 1n;
+  const exponent = Number((raw >> 52n) & 0x7FFn);
+  const fraction = raw & ((1n << 52n) - 1n);
+  let exp80;
+  let significand;
 
-  if (significand >= (1n << 64n)) {
-    significand >>= 1n;
-    biased += 1;
+  if (exponent === 0x7FF) {
+    exp80 = 0x7FFFn;
+    // Infinity has an explicit integer bit and no fraction. Preserve NaN payloads.
+    significand = fraction === 0n ? (1n << 63n) : (1n << 63n) | (fraction << 11n);
+    if (fraction !== 0n && (significand & ((1n << 63n) - 1n)) === 0n) significand |= 1n;
+  } else if (exponent === 0) {
+    if (fraction === 0n) return bitsFromBigInt(sign << 79n, 80);
+    const highest = fraction.toString(2).length - 1;
+    exp80 = BigInt((highest - 1074) + 16383);
+    significand = fraction << BigInt(63 - highest);
+  } else {
+    exp80 = BigInt((exponent - 1023) + 16383);
+    significand = ((1n << 52n) | fraction) << 11n;
   }
 
-  if (biased <= 0) {
-    const subScaled = abs / 2 ** (1 - 16383);
-    significand = BigInt(Math.round(subScaled * 2 ** 63));
-    biased = 0;
-  }
+  return bitsFromBigInt((sign << 79n) | (exp80 << 64n) | significand, 80);
+}
 
-  if (biased >= 0x7fff) {
-    return bitsFromBigInt((sign << 79n) | (0x7FFFn << 64n) | (1n << 63n), 80);
-  }
-
-  return bitsFromBigInt((sign << 79n) | (BigInt(biased) << 64n) | significand, 80);
+function float64HexToFloat80Hex(hex) {
+  return bitsToHex(float64HexToFloat80Bits(hex), 20);
 }
 
 function decimalToBits(format, value) {
@@ -401,4 +410,26 @@ themeToggle.addEventListener("click", () => {
   syncThemeControl();
 });
 
+function update64To80Conversion() {
+  const clean = sanitizeHex(float64HexInput.value, 16);
+  float64HexInput.value = clean;
+  const f64Bits = hexToBits(clean, 64);
+  const f80Bits = float64HexToFloat80Bits(clean);
+  float80HexOutput.value = bitsToHex(f80Bits, 20);
+  float80HexOutput.textContent = float80HexOutput.value;
+
+  // Put both exact bit patterns into the main matrix so their decoded values
+  // can be compared side by side immediately.
+  state.get("f64").bits = f64Bits;
+  state.get("f80").bits = f80Bits;
+  updateFormat("f64");
+  updateFormat("f80");
+}
+
+convert64To80Button.addEventListener("click", update64To80Conversion);
+float64HexInput.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") update64To80Conversion();
+});
+
 syncThemeControl();
+update64To80Conversion();
