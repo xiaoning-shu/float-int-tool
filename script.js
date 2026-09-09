@@ -19,6 +19,7 @@ const joinInput = document.querySelector("#joinInput");
 const joinOutput = document.querySelector("#joinOutput");
 const copyJoined = document.querySelector("#copyJoined");
 const clearJoined = document.querySelector("#clearJoined");
+const joinCount = document.querySelector("#joinCount");
 
 function bitsFromBigInt(value, totalBits) {
   return Array.from({ length: totalBits }, (_, index) => {
@@ -441,12 +442,14 @@ function updateJoinedLines() {
     .map((line) => line.trim())
     .filter(Boolean);
   joinOutput.value = lines.join(" ");
+  joinCount.textContent = `${lines.length} ${lines.length === 1 ? "line" : "lines"}`;
 }
 
 joinInput.addEventListener("input", updateJoinedLines);
 clearJoined.addEventListener("click", () => {
   joinInput.value = "";
   joinOutput.value = "";
+  joinCount.textContent = "0 lines";
   joinInput.focus();
 });
 

@@ -238,19 +238,27 @@ input:focus { border-color: color-mix(in srgb, var(--accent) 60%, transparent); 
 .converter-output { display: inline-flex; align-items: center; min-width: 260px; color: var(--accent); }
 .converter-help { margin: 12px 0 0; color: var(--muted); font-size: .75rem; }
 @media (max-width: 700px) { .converter-row { align-items: stretch; flex-direction: column; } .converter-row input, .converter-output { width: 100%; box-sizing: border-box; } }
-.line-joiner-panel { margin: 28px 0 42px; padding: 20px 22px; border: 1px solid var(--line); border-radius: 16px; background: var(--panel); }
-.line-joiner-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin-top: 14px; }
+.line-joiner-panel { position: relative; overflow: hidden; margin: 28px 0 42px; padding: 24px 24px 20px; border: 1px solid var(--line); border-radius: 16px; background: linear-gradient(135deg, var(--panel), color-mix(in srgb, var(--panel) 78%, var(--accent) 22%)); }
+.line-joiner-panel::after { content: "01"; position: absolute; right: 22px; top: 14px; color: var(--line-strong); font: 700 4.5rem/1 "DM Mono", monospace; opacity: .22; pointer-events: none; }
+.line-joiner-heading { position: relative; z-index: 1; display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; }
+.line-joiner-heading .section-label { margin-bottom: 7px; }
+.line-joiner-heading h2 { margin: 0; color: var(--ink); font-size: clamp(1.15rem, 2vw, 1.5rem); letter-spacing: -.03em; }
+.joiner-status { display: inline-flex; align-items: center; gap: 7px; margin-bottom: 4px; color: var(--muted); font: 600 .65rem "DM Mono", monospace; letter-spacing: .1em; }
+.joiner-status i { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 18%, transparent); }
+.line-joiner-grid { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin-top: 22px; }
 .line-joiner-field { min-width: 0; }
-.line-joiner-field label { display: block; margin-bottom: 8px; color: var(--muted); font-size: .75rem; text-transform: uppercase; letter-spacing: .08em; }
-.line-joiner-field textarea { width: 100%; min-height: 180px; box-sizing: border-box; resize: vertical; border: 1px solid var(--line); border-radius: 10px; padding: 12px; color: var(--ink); background: var(--bit-off); font: 500 .85rem/1.55 "DM Mono", monospace; }
+.line-joiner-label { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+.line-joiner-field label { display: block; margin: 0; color: var(--muted); font-size: .7rem; text-transform: uppercase; letter-spacing: .08em; }
+.line-joiner-label span { color: var(--muted); font: 500 .62rem "DM Mono", monospace; }
+.line-joiner-field textarea { width: 100%; min-height: 188px; box-sizing: border-box; resize: vertical; border: 1px solid var(--line); border-radius: 11px; padding: 14px; color: var(--ink); background: color-mix(in srgb, var(--bit-off) 82%, transparent); font: 500 .85rem/1.6 "DM Mono", monospace; }
 .line-joiner-field textarea:focus { outline: 2px solid color-mix(in srgb, var(--accent) 55%, transparent); outline-offset: 1px; border-color: var(--accent); }
 .line-joiner-field textarea[readonly] { color: var(--accent-ink); }
 .line-joiner-output-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
-.line-joiner-output-head label { margin-bottom: 8px; }
+.line-joiner-output-head label { margin-bottom: 0; }
 .line-joiner-actions { display: flex; gap: 7px; }
 .secondary-action { border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; color: var(--ink-soft); background: var(--bit-off); font: 500 .72rem "Manrope", sans-serif; cursor: pointer; }
 .secondary-action:hover { color: var(--accent-ink); border-color: var(--accent); background: var(--accent); }
-@media (max-width: 700px) { .line-joiner-grid { grid-template-columns: 1fr; } }
+@media (max-width: 700px) { .line-joiner-panel { padding: 20px 16px 17px; } .line-joiner-grid { grid-template-columns: 1fr; } .line-joiner-heading { align-items: flex-start; flex-direction: column; gap: 8px; } }
 .toolbar button small { margin-left: 5px; color: var(--muted); font: 500 .55rem "Manrope", sans-serif; text-transform: uppercase; }
 .toolbar button:hover { color: var(--accent-ink); border-color: var(--accent); background: var(--accent); transform: translateY(-2px); }
 

@@ -101,17 +101,23 @@
       </section>
 
       <section class="line-joiner-panel" id="line-joiner" aria-label="Join lines with spaces">
-        <div class="section-label"><span>Line joiner</span><i></i></div>
+        <div class="line-joiner-heading">
+          <div>
+            <div class="section-label"><span>Line joiner</span><i></i></div>
+            <h2>把多行数据整理成一行</h2>
+          </div>
+          <span class="joiner-status"><i></i> LIVE</span>
+        </div>
         <div class="line-joiner-grid">
           <div class="line-joiner-field">
-            <label for="joinInput">逐行输入</label>
+            <div class="line-joiner-label"><label for="joinInput">逐行输入</label><span id="joinCount">0 lines</span></div>
             <textarea id="joinInput" rows="8" placeholder="把数据一行一行粘贴到这里…" spellcheck="false"></textarea>
           </div>
           <div class="line-joiner-field">
             <div class="line-joiner-output-head">
-              <label for="joinOutput">整理结果</label>
+              <div class="line-joiner-label"><label for="joinOutput">整理结果</label><span>single-line output</span></div>
               <div class="line-joiner-actions">
-                <button id="copyJoined" class="secondary-action" type="button">复制</button>
+                <button id="copyJoined" class="primary-action" type="button">复制 <span aria-hidden="true">↗</span></button>
                 <button id="clearJoined" class="secondary-action" type="button">清空</button>
               </div>
             </div>
