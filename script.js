@@ -439,7 +439,8 @@ float64HexInput.addEventListener("keydown", (event) => {
 function updateJoinedLines() {
   const lines = joinInput.value
     .split(/\r?\n/)
-    .map((line) => line.trim())
+    // Remove bracketed data (including the brackets) before joining.
+    .map((line) => line.replace(/\[[^\]]*\]/g, "").trim())
     .filter(Boolean);
   joinOutput.value = lines.join(" ");
   joinCount.textContent = `${lines.length} ${lines.length === 1 ? "line" : "lines"}`;
