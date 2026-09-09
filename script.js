@@ -439,7 +439,7 @@ float64HexInput.addEventListener("keydown", (event) => {
 function updateJoinedLines() {
   const lines = joinInput.value
     // Remove bracketed blocks before splitting so pasted blocks spanning lines work too.
-    .replace(/\[[\s\S]*?\]/g, "")
+    .replace(/\[[\s\S]*?\]|【[\s\S]*?】/g, "")
     .split(/\r?\n/)
     .map((line) => line.trim())
     .filter(Boolean);
