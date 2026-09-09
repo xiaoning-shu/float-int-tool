@@ -8,5 +8,6 @@ It supports:
 - bit toggling
 - hexadecimal editing
 - decimal input and preset values
+- line joiner: paste one item per line and combine them with single spaces
 
 Open `index.html` directly in a browser, or publish the repository with GitHub Pages.

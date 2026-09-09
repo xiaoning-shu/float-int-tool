@@ -15,6 +15,10 @@ const themeMeta = document.querySelector('meta[name="theme-color"]');
 const float64HexInput = document.querySelector("#float64Hex");
 const convert64To80Button = document.querySelector("#convert64To80");
 const float80HexOutput = document.querySelector("#float80Hex");
+const joinInput = document.querySelector("#joinInput");
+const joinOutput = document.querySelector("#joinOutput");
+const copyJoined = document.querySelector("#copyJoined");
+const clearJoined = document.querySelector("#clearJoined");
 
 function bitsFromBigInt(value, totalBits) {
   return Array.from({ length: totalBits }, (_, index) => {
@@ -431,5 +435,35 @@ float64HexInput.addEventListener("keydown", (event) => {
   if (event.key === "Enter") update64To80Conversion();
 });
 
+function updateJoinedLines() {
+  const lines = joinInput.value
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean);
+  joinOutput.value = lines.join(" ");
+}
+
+joinInput.addEventListener("input", updateJoinedLines);
+clearJoined.addEventListener("click", () => {
+  joinInput.value = "";
+  joinOutput.value = "";
+  joinInput.focus();
+});
+
+copyJoined.addEventListener("click", async () => {
+  if (!joinOutput.value) return;
+  try {
+    await navigator.clipboard.writeText(joinOutput.value);
+    const original = copyJoined.textContent;
+    copyJoined.textContent = "已复制";
+    setTimeout(() => { copyJoined.textContent = original; }, 1200);
+  } catch {
+    joinOutput.focus();
+    joinOutput.select();
+    document.execCommand("copy");
+  }
+});
+
 syncThemeControl();
 update64To80Conversion();
+updateJoinedLines();

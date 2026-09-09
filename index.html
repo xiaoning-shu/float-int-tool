@@ -33,6 +33,7 @@
         <div class="nav-links" aria-label="Page sections">
           <a class="active" href="#formats">Workbench</a>
           <a href="#presets">Presets</a>
+          <a href="#line-joiner">Line joiner</a>
           <a href="#about">About</a>
         </div>
         <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch color theme" aria-pressed="false">
@@ -97,6 +98,27 @@
           <output id="float80Hex" class="converter-output" aria-live="polite">4000C90FDAA22168C000</output>
         </div>
         <p class="converter-help">输入 16 位十六进制 binary64（可带 0x），输出表示相同数值的 20 位 x87 extended，并同步更新下方两张表示卡。指数会重设偏置，有效数会扩展到 64 位。</p>
+      </section>
+
+      <section class="line-joiner-panel" id="line-joiner" aria-label="Join lines with spaces">
+        <div class="section-label"><span>Line joiner</span><i></i></div>
+        <div class="line-joiner-grid">
+          <div class="line-joiner-field">
+            <label for="joinInput">逐行输入</label>
+            <textarea id="joinInput" rows="8" placeholder="把数据一行一行粘贴到这里…" spellcheck="false"></textarea>
+          </div>
+          <div class="line-joiner-field">
+            <div class="line-joiner-output-head">
+              <label for="joinOutput">整理结果</label>
+              <div class="line-joiner-actions">
+                <button id="copyJoined" class="secondary-action" type="button">复制</button>
+                <button id="clearJoined" class="secondary-action" type="button">清空</button>
+              </div>
+            </div>
+            <textarea id="joinOutput" rows="8" readonly aria-live="polite" placeholder="整理结果会显示在这里…"></textarea>
+          </div>
+        </div>
+        <p class="converter-help">每一行会先去除首尾空白，再用一个空格连接；空白行将被忽略。</p>
       </section>
 
       <div class="workspace-heading">

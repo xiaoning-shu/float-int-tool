@@ -238,6 +238,19 @@ input:focus { border-color: color-mix(in srgb, var(--accent) 60%, transparent); 
 .converter-output { display: inline-flex; align-items: center; min-width: 260px; color: var(--accent); }
 .converter-help { margin: 12px 0 0; color: var(--muted); font-size: .75rem; }
 @media (max-width: 700px) { .converter-row { align-items: stretch; flex-direction: column; } .converter-row input, .converter-output { width: 100%; box-sizing: border-box; } }
+.line-joiner-panel { margin: 28px 0 42px; padding: 20px 22px; border: 1px solid var(--line); border-radius: 16px; background: var(--panel); }
+.line-joiner-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin-top: 14px; }
+.line-joiner-field { min-width: 0; }
+.line-joiner-field label { display: block; margin-bottom: 8px; color: var(--muted); font-size: .75rem; text-transform: uppercase; letter-spacing: .08em; }
+.line-joiner-field textarea { width: 100%; min-height: 180px; box-sizing: border-box; resize: vertical; border: 1px solid var(--line); border-radius: 10px; padding: 12px; color: var(--ink); background: var(--bit-off); font: 500 .85rem/1.55 "DM Mono", monospace; }
+.line-joiner-field textarea:focus { outline: 2px solid color-mix(in srgb, var(--accent) 55%, transparent); outline-offset: 1px; border-color: var(--accent); }
+.line-joiner-field textarea[readonly] { color: var(--accent-ink); }
+.line-joiner-output-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.line-joiner-output-head label { margin-bottom: 8px; }
+.line-joiner-actions { display: flex; gap: 7px; }
+.secondary-action { border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; color: var(--ink-soft); background: var(--bit-off); font: 500 .72rem "Manrope", sans-serif; cursor: pointer; }
+.secondary-action:hover { color: var(--accent-ink); border-color: var(--accent); background: var(--accent); }
+@media (max-width: 700px) { .line-joiner-grid { grid-template-columns: 1fr; } }
 .toolbar button small { margin-left: 5px; color: var(--muted); font: 500 .55rem "Manrope", sans-serif; text-transform: uppercase; }
 .toolbar button:hover { color: var(--accent-ink); border-color: var(--accent); background: var(--accent); transform: translateY(-2px); }
 
