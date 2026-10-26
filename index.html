@@ -110,7 +110,7 @@
         </div>
         <div class="line-joiner-grid">
           <div class="line-joiner-field">
-            <div class="line-joiner-label"><label for="joinInput">逐行输入</label><span id="joinCount">0 lines</span></div>
+            <div class="line-joiner-label"><label for="joinInput">逐行输入</label><span id="joinCount">0 unique lines</span></div>
             <textarea id="joinInput" rows="8" placeholder="把数据一行一行粘贴到这里…" spellcheck="false"></textarea>
           </div>
           <div class="line-joiner-field">
@@ -124,7 +124,7 @@
             <textarea id="joinOutput" rows="8" readonly aria-live="polite" placeholder="整理结果会显示在这里…"></textarea>
           </div>
         </div>
-        <p class="converter-help">每一行会先移除 [] 或 【】及其中内容，再去除首尾空白并用一个空格连接；空白行将被忽略。</p>
+        <p class="converter-help">每一行会先移除 [] 或 【】及其中内容，再去除首尾空白并去重，按首次出现顺序用一个空格连接；空白行将被忽略。</p>
       </section>
 
       <div class="workspace-heading">

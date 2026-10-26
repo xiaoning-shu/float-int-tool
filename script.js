@@ -443,15 +443,16 @@ function updateJoinedLines() {
     .split(/\r?\n/)
     .map((line) => line.trim())
     .filter(Boolean);
-  joinOutput.value = lines.join(" ");
-  joinCount.textContent = `${lines.length} ${lines.length === 1 ? "line" : "lines"}`;
+  const uniqueLines = [...new Set(lines)];
+  joinOutput.value = uniqueLines.join(" ");
+  joinCount.textContent = `${uniqueLines.length} ${uniqueLines.length === 1 ? "unique line" : "unique lines"}`;
 }
 
 joinInput.addEventListener("input", updateJoinedLines);
 clearJoined.addEventListener("click", () => {
   joinInput.value = "";
   joinOutput.value = "";
-  joinCount.textContent = "0 lines";
+  joinCount.textContent = "0 unique lines";
   joinInput.focus();
 });
 
