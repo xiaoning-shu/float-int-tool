@@ -20,6 +20,11 @@ const joinOutput = document.querySelector("#joinOutput");
 const copyJoined = document.querySelector("#copyJoined");
 const clearJoined = document.querySelector("#clearJoined");
 const joinCount = document.querySelector("#joinCount");
+const dedupeInput = document.querySelector("#dedupeInput");
+const dedupeOutput = document.querySelector("#dedupeOutput");
+const copyDeduplicated = document.querySelector("#copyDeduplicated");
+const clearDeduplicated = document.querySelector("#clearDeduplicated");
+const dedupeCount = document.querySelector("#dedupeCount");
 
 function bitsFromBigInt(value, totalBits) {
   return Array.from({ length: totalBits }, (_, index) => {
@@ -443,16 +448,15 @@ function updateJoinedLines() {
     .split(/\r?\n/)
     .map((line) => line.trim())
     .filter(Boolean);
-  const uniqueLines = [...new Set(lines)];
-  joinOutput.value = uniqueLines.join(" ");
-  joinCount.textContent = `${uniqueLines.length} ${uniqueLines.length === 1 ? "unique line" : "unique lines"}`;
+  joinOutput.value = lines.join(" ");
+  joinCount.textContent = `${lines.length} ${lines.length === 1 ? "line" : "lines"}`;
 }
 
 joinInput.addEventListener("input", updateJoinedLines);
 clearJoined.addEventListener("click", () => {
   joinInput.value = "";
   joinOutput.value = "";
-  joinCount.textContent = "0 unique lines";
+  joinCount.textContent = "0 lines";
   joinInput.focus();
 });
 
@@ -470,6 +474,39 @@ copyJoined.addEventListener("click", async () => {
   }
 });
 
+function updateDeduplicatedLines() {
+  const lines = dedupeInput.value
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean);
+  const uniqueLines = [...new Set(lines)];
+  dedupeOutput.value = uniqueLines.join(" ");
+  dedupeCount.textContent = `${uniqueLines.length} ${uniqueLines.length === 1 ? "unique line" : "unique lines"}`;
+}
+
+dedupeInput.addEventListener("input", updateDeduplicatedLines);
+clearDeduplicated.addEventListener("click", () => {
+  dedupeInput.value = "";
+  dedupeOutput.value = "";
+  dedupeCount.textContent = "0 unique lines";
+  dedupeInput.focus();
+});
+
+copyDeduplicated.addEventListener("click", async () => {
+  if (!dedupeOutput.value) return;
+  try {
+    await navigator.clipboard.writeText(dedupeOutput.value);
+    const original = copyDeduplicated.textContent;
+    copyDeduplicated.textContent = "已复制";
+    setTimeout(() => { copyDeduplicated.textContent = original; }, 1200);
+  } catch {
+    dedupeOutput.focus();
+    dedupeOutput.select();
+    document.execCommand("copy");
+  }
+});
+
 syncThemeControl();
 update64To80Conversion();
 updateJoinedLines();
+updateDeduplicatedLines();

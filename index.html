@@ -34,6 +34,7 @@
           <a class="active" href="#formats">Workbench</a>
           <a href="#presets">Presets</a>
           <a href="#line-joiner">Line joiner</a>
+          <a href="#dedupe-joiner">Deduplicate</a>
           <a href="#about">About</a>
         </div>
         <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch color theme" aria-pressed="false">
@@ -110,7 +111,7 @@
         </div>
         <div class="line-joiner-grid">
           <div class="line-joiner-field">
-            <div class="line-joiner-label"><label for="joinInput">逐行输入</label><span id="joinCount">0 unique lines</span></div>
+            <div class="line-joiner-label"><label for="joinInput">逐行输入</label><span id="joinCount">0 lines</span></div>
             <textarea id="joinInput" rows="8" placeholder="把数据一行一行粘贴到这里…" spellcheck="false"></textarea>
           </div>
           <div class="line-joiner-field">
@@ -124,7 +125,34 @@
             <textarea id="joinOutput" rows="8" readonly aria-live="polite" placeholder="整理结果会显示在这里…"></textarea>
           </div>
         </div>
-        <p class="converter-help">每一行会先移除 [] 或 【】及其中内容，再去除首尾空白并去重，按首次出现顺序用一个空格连接；空白行将被忽略。</p>
+        <p class="converter-help">每一行会先移除 [] 或 【】及其中内容，再去除首尾空白并用一个空格连接；空白行将被忽略。</p>
+      </section>
+
+      <section class="line-joiner-panel dedupe-panel" id="dedupe-joiner" aria-label="Deduplicate and join lines">
+        <div class="line-joiner-heading">
+          <div>
+            <div class="section-label"><span>Deduplicate</span><i></i></div>
+            <h2>重复行去重并整理成一行</h2>
+          </div>
+          <span class="joiner-status"><i></i> LIVE</span>
+        </div>
+        <div class="line-joiner-grid">
+          <div class="line-joiner-field">
+            <div class="line-joiner-label"><label for="dedupeInput">逐行输入</label><span id="dedupeCount">0 unique lines</span></div>
+            <textarea id="dedupeInput" rows="8" placeholder="把包含重复项的数据一行一行粘贴到这里…" spellcheck="false"></textarea>
+          </div>
+          <div class="line-joiner-field">
+            <div class="line-joiner-output-head">
+              <div class="line-joiner-label"><label for="dedupeOutput">去重结果</label><span>single-line output</span></div>
+              <div class="line-joiner-actions">
+                <button id="copyDeduplicated" class="primary-action" type="button">复制 <span aria-hidden="true">↗</span></button>
+                <button id="clearDeduplicated" class="secondary-action" type="button">清空</button>
+              </div>
+            </div>
+            <textarea id="dedupeOutput" rows="8" readonly aria-live="polite" placeholder="去重整理结果会显示在这里…"></textarea>
+          </div>
+        </div>
+        <p class="converter-help">每行先去除首尾空白并忽略空白行，再按完全相同的内容去重，保留首次出现顺序，最后用一个空格连接；不会移除括号内容。</p>
       </section>
 
       <div class="workspace-heading">

@@ -8,6 +8,7 @@ It supports:
 - bit toggling
 - hexadecimal editing
 - decimal input and preset values
-- line joiner: paste one item per line, remove `[...]` / `【...】` blocks, deduplicate, and combine with single spaces
+- line joiner: paste one item per line, remove `[...]` / `【...】` blocks, and combine with single spaces
+- deduplicate joiner: paste one item per line, remove duplicate lines, and combine with single spaces
 
 Open `index.html` directly in a browser, or publish the repository with GitHub Pages.

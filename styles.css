@@ -240,6 +240,7 @@ input:focus { border-color: color-mix(in srgb, var(--accent) 60%, transparent); 
 @media (max-width: 700px) { .converter-row { align-items: stretch; flex-direction: column; } .converter-row input, .converter-output { width: 100%; box-sizing: border-box; } }
 .line-joiner-panel { position: relative; overflow: hidden; margin: 28px 0 42px; padding: 24px 24px 20px; border: 1px solid var(--line); border-radius: 16px; background: linear-gradient(135deg, var(--panel), color-mix(in srgb, var(--panel) 78%, var(--accent) 22%)); }
 .line-joiner-panel::after { content: "01"; position: absolute; right: 22px; top: 14px; color: var(--line-strong); font: 700 4.5rem/1 "DM Mono", monospace; opacity: .22; pointer-events: none; }
+.dedupe-panel::after { content: "02"; }
 .line-joiner-heading { position: relative; z-index: 1; display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; }
 .line-joiner-heading .section-label { margin-bottom: 7px; }
 .line-joiner-heading h2 { margin: 0; color: var(--ink); font-size: clamp(1.15rem, 2vw, 1.5rem); letter-spacing: -.03em; }
